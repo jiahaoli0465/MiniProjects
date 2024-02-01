@@ -111,6 +111,40 @@ def make_board(board_string):
 
 def find(board, word):
     """Can word be found in board?"""
+    visited = set()
+    for row in range(len(board)):
+        for col in range(len(board[0])):
+            if word[0] == board[row][col] and findHelper(board, word, visited, row, col):
+                return True
+
+    return False
+
+
+def findHelper(board, word, visited, row, col):
+    """Can word be found in board, starting at row, col?"""
+    if len(word) == 0:
+        return True
+    if row < 0 or row >= len(board) or col < 0 or col >= len(board[0]):
+        return False
+    if (row, col) in visited:
+        return False
+    if board[row][col] != word[0]:
+        return False
+    visited.add((row, col))
+
+    # check all neighbors
+    if findHelper(board, word[1:], visited, row - 1, col):
+        return True
+    if findHelper(board, word[1:], visited, row + 1, col):
+        return True
+    if findHelper(board, word[1:], visited, row, col - 1):
+        return True
+    if findHelper(board, word[1:], visited, row, col + 1):
+        return True
+
+    # if none of the neighbors work, backtrack
+    visited.remove((row, col))
+    return False
 
 
 if __name__ == '__main__':

@@ -53,6 +53,71 @@ function makeBoard(boardString) {
 function find(board, word) {
   /** Can word be found in board? */
   // TODO
+  const visited = new Set();
+
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[0].length; col++) {
+      if (word[0] === board[row][col] && findHelper(board, word, visited, row, col)) {
+        return true;
+      }
+    }
+  }
+  return false;
+
+
+
+}
+
+function findHelper(board, word, visited, row, col) {
+  /** Can we find word, starting at row, col? */
+  // TODO
+  if (word.length === 0) {
+    return true;
+  }
+
+  if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
+    return false;
+  }  
+
+  if (visited.has(`${row}-${col}`)) {
+    return false;
+  }
+
+  if (board[row][col] !== word[0]) {
+    return false;
+  }
+
+  visited.add(`${row}-${col}`);
+
+  if (findHelper(board, word.slice(1), visited, row - 1, col)) {
+    return true;
+  }
+
+  if (findHelper(board, word.slice(1), visited, row + 1, col)) {
+    return true;
+  }
+
+  if (findHelper(board, word.slice(1), visited, row, col - 1)) {
+
+    return true;
+  }
+
+  if (findHelper(board, word.slice(1), visited, row, col + 1)) {
+    return true;
+  }
+
+
+
+
+
+  visited.delete(`${row}-${col}`);
+  return false;
+
+
+
+
+
+
 }
 
 // EXAMPLE TEST
