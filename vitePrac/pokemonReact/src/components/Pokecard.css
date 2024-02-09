@@ -1,0 +1,15 @@
+#Pokemon {
+    border: 1px solid black;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: beige;
+}
+
+#Pokemon h3 {
+    color: rgb(90, 123, 205);
+}
