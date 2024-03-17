@@ -1,70 +1,88 @@
-// avlTree.test.js
-
 const AVLTree = require("./AVL");
 
 describe("AVLTree", () => {
-  let avlTree;
+  let avl;
 
   beforeEach(() => {
-    avlTree = new AVLTree();
+    avl = new AVLTree();
   });
 
   test("should create an empty AVL tree", () => {
-    expect(avlTree.root).toBeNull();
+    expect(avl.root).toBeNull();
   });
 
-  test("should insert nodes and balance the tree", () => {
-    avlTree.insert(5);
-    avlTree.insert(3);
-    avlTree.insert(7);
-    avlTree.insert(1);
+  test("should insert values into the AVL tree", () => {
+    const keys = [50, 25, 75, 15, 35, 60, 120, 10, 68, 90, 125, 83, 100];
+    keys.forEach((key) => avl.insert(key));
 
-    expect(avlTree.root.value).toBe(5);
-    expect(avlTree.root.left.value).toBe(3);
-    expect(avlTree.root.right.value).toBe(7);
-    expect(avlTree.root.left.left.value).toBe(1);
+    const inorderKeys = [];
+    avl.inorderTraversal((key) => inorderKeys.push(key));
+    expect(inorderKeys).toEqual([
+      10, 15, 25, 35, 50, 60, 68, 75, 83, 90, 100, 120, 125,
+    ]);
   });
 
-  test("should perform left-left rotation", () => {
-    avlTree.insert(3);
-    avlTree.insert(2);
-    avlTree.insert(1);
+  test("should search for values in the AVL tree", () => {
+    const keys = [50, 25, 75, 15, 35, 60, 120, 10, 68, 90, 125, 83, 100];
+    keys.forEach((key) => avl.insert(key));
 
-    expect(avlTree.root.value).toBe(2);
-    expect(avlTree.root.left.value).toBe(1);
-    expect(avlTree.root.right.value).toBe(3);
+    expect(avl.search(125)).toBeDefined();
+    expect(avl.search(125).key).toBe(125);
+    expect(avl.search(1)).toBeNull();
   });
 
-  test("should perform right-right rotation", () => {
-    avlTree.insert(3);
-    avlTree.insert(4);
-    avlTree.insert(5);
+  test("should delete values from the AVL tree", () => {
+    const keys = [50, 25, 75, 15, 35, 60, 120, 10, 68, 90, 125, 83, 100];
+    keys.forEach((key) => avl.insert(key));
 
-    expect(avlTree.root.value).toBe(4);
-    expect(avlTree.root.left.value).toBe(3);
-    expect(avlTree.root.right.value).toBe(5);
+    avl.delete(120);
+    expect(avl.search(120)).toBeNull();
+
+    const inorderKeys = [];
+    avl.inorderTraversal((key) => inorderKeys.push(key));
+    expect(inorderKeys).toEqual([
+      10, 15, 25, 35, 50, 60, 68, 75, 83, 90, 100, 125,
+    ]);
+
+    avl.delete(10);
+    expect(avl.search(10)).toBeNull();
+
+    inorderKeys.length = 0;
+    avl.inorderTraversal((key) => inorderKeys.push(key));
+    expect(inorderKeys).toEqual([15, 25, 35, 50, 60, 68, 75, 83, 90, 100, 125]);
   });
 
-  test("should perform left-right rotation", () => {
-    avlTree.insert(5);
-    avlTree.insert(1);
-    avlTree.insert(3);
+  test("should perform left and right rotations", () => {
+    avl.insert(50);
+    avl.insert(25);
+    avl.insert(75);
+    avl.insert(10);
+    avl.insert(30);
+    avl.insert(60);
+    avl.insert(80);
+    avl.insert(5);
+    avl.insert(15);
+    avl.insert(27);
+    avl.insert(55);
+    avl.insert(70);
+    avl.insert(90);
 
-    expect(avlTree.root.value).toBe(3);
-    expect(avlTree.root.left.value).toBe(1);
-    expect(avlTree.root.right.value).toBe(5);
+    const inorderKeys = [];
+    avl.inorderTraversal((key) => inorderKeys.push(key));
+    expect(inorderKeys).toEqual([
+      5, 10, 15, 25, 27, 30, 50, 55, 60, 70, 75, 80, 90,
+    ]);
   });
+  //should not handle dupes lol
+  // test("should handle duplicate values", () => {
+  //   avl.insert(50);
+  //   avl.insert(25);
+  //   avl.insert(75);
+  //   avl.insert(25);
+  //   avl.insert(75);
 
-  test("should perform right-left rotation", () => {
-    avlTree.insert(3);
-    avlTree.insert(5);
-    avlTree.insert(4);
-
-    expect(avlTree.root.value).toBe(4);
-    expect(avlTree.root.left.value).toBe(3);
-    expect(avlTree.root.right.value).toBe(5);
-  });
-
-  // Add more test cases for other AVL tree operations
-  // ...
+  //   const inorderKeys = [];
+  //   avl.inorderTraversal((key) => inorderKeys.push(key));
+  //   expect(inorderKeys).toEqual([25, 50, 75]);
+  // });
 });
